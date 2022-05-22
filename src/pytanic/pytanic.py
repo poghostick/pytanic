@@ -4,15 +4,16 @@ from sklearn.pipeline import Pipeline
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from typing import Dict, List, Tuple
 import zipfile
-from binner import Binner
-from encoder import Encoder
-from attribute_adder import AttributeAdder
+
+from pytanic.binner import Binner
+from pytanic.encoder import Encoder
+from pytanic.attribute_adder import AttributeAdder
 
 def load_data() -> Tuple[pd.DataFrame]:
     """
     Unzip, load and return training and test sets.
     """
-    data_path = Path().resolve() / 'data'
+    data_path = Path().absolute() / 'data'
     if not Path.is_file(data_path / 'train.csv') or not Path.is_file(data_path / 'test.csv'):
         with zipfile.ZipFile(data_path / 'titanic.zip', 'r') as zip_ref:
             zip_ref.extractall(data_path)
@@ -22,8 +23,6 @@ def load_data() -> Tuple[pd.DataFrame]:
 
 
 train_df, test_df = load_data()
-
-
 
 pipe = Pipeline([
     ('num_imputer', Binner(['Age', 'Fare'])),
